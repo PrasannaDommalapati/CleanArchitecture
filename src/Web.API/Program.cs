@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(options =>
 // Configure NLog
 builder.Services.AddLogging(logging =>
 {
-    logging.ClearProviders();
+    logging.ClearProviders().AddConsole();
     logging.SetMinimumLevel(LogLevel.Trace);
 });
 
