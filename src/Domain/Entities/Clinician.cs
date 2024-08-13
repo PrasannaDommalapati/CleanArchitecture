@@ -1,8 +1,12 @@
-﻿using Domain.BaseEntities;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.BaseEntities;
 
 namespace Domain.Entities;
 
 public sealed class Clinician : BaseAuditableEntity
 {
-    // i am heres
+    [Key]
+    public Guid ClinicianId { get; set; }
+    public string FullName { get; set; }
+    public string Position { get; set; }
 }
