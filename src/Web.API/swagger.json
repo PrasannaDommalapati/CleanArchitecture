@@ -28,6 +28,40 @@
           }
         }
       }
+    },
+    "/apple": {
+      "post": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "summary": "I am idfdifkjdbdi iuhdf iuvhiduhfviudiufvidf",
+        "operationId": "WeatherForecast_SaveNumber",
+        "requestBody": {
+          "x-name": "weatherForecast",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherForecast"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

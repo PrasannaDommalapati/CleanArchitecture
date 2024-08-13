@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.API.Controllers;
@@ -21,7 +22,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
-        _logger.LogInformation("Hello, this is the index!");
+        _logger.LogInformation("Hello, this is the index!!");
         return Enumerable.Range(1, 25).Select(index => new WeatherForecast
         {
             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -29,5 +30,14 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+    }
+    [HttpPost]
+    [Route("/apple")]
+    [Description("I am idfdifkjdbdi iuhdf iuvhiduhfviudiufvidf")]
+    public IActionResult SaveNumber([FromBody] WeatherForecast weatherForecast)
+    {
+        _logger.LogInformation("Successfully saved number");
+
+        return Ok(weatherForecast);
     }
 }
