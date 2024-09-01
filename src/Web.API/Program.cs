@@ -1,6 +1,5 @@
 using Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog.Extensions.Logging;
 using NSwag;
@@ -11,12 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 // For EF
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Domain")));
+{
+    //options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Domain"));
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Domain"));
+});
 
 // For IdentityUser
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>()
+//    .AddDefaultTokenProviders();
 
 // For Autherntication
 builder.Services.AddAuthentication(options =>

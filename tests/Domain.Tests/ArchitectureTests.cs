@@ -7,7 +7,7 @@ namespace Domain.Tests;
 
 public class ArchitectureTests
 {
-    private readonly Types _entities = Types.InNamespace(typeof(Clinician).Namespace);
+    private readonly Types _entities = Types.InNamespace(typeof(Applicant).Namespace);
 
     [Fact]
     public void EntitiesShouldBeSealed()
