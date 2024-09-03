@@ -9,18 +9,10 @@ using Serilog;
 using Serilog.Sinks.Seq;
 using Web.API.Middlewares;
 
-// Configure Serilog
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug() // Set the minimum log level
-    .Enrich.FromLogContext()
-    .WriteTo.Console() // Log to console (optional)
-    .WriteTo.Seq("http://localhost:5341") // Configure Seq sink
-    .CreateLogger();
-
-try
-{
 
     var builder = WebApplication.CreateBuilder(args);
+    
+    builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
     // For EF
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -57,7 +49,6 @@ try
     //// Add NLog as the logger provider
     //builder.Services.AddSingleton<ILoggerProvider, NLogLoggerProvider>();
 
-    builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
     //builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
 
@@ -114,12 +105,3 @@ try
     app.MapControllers();
 
     app.Run();
-}
-catch(Exception ex)
-{
-    Log.Fatal(ex, "Application start-up failed");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
