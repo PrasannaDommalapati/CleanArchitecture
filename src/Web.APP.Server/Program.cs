@@ -52,7 +52,7 @@ try
         var apiBaseUrl = new Uri(configurationSection.Value);
         services.AddHttpClient("APIClient", ConfigureHttpClient);
 
-        AddWithAPIHttpClient<IWeatherForecastClient, WeatherForecastClient>();
+        AddWithAPIHttpClient<IApplicantsClient, ApplicantsClient>();
 
         void AddWithAPIHttpClient<TClient, TImplementation>() where TClient : class where TImplementation : class, TClient
         {

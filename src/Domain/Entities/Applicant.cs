@@ -13,7 +13,4 @@ public sealed class Applicant : BaseAuditableEntity
     [MaxLength(100)]
     [Column("last_name")]
     public string LastName { get; set; }
-    [MaxLength(100)]
-    [Column("position")]
-    public string Position { get; set; }
 }

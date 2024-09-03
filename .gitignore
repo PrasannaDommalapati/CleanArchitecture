@@ -229,5 +229,4 @@ _Pvt_Extensions
 
 # Paket dependency manager
 .paket/paket.exe
-/src/Web.API/logs
 /src/Web.API/seq/Logs

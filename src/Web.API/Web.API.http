@@ -1,6 +1,9 @@
-@Web.API_HostAddress = http://localhost:5270
+POST https://localhost:7118/applicants
+Content-Type: application/json
+{
+  "firstName": "john.doe",
+  "lastName": "john.doe",
+}
 
-GET {{Web.API_HostAddress}}/weatherforecast/
-Accept: application/json
 
 ###

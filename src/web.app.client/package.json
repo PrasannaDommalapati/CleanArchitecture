@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1",
+    "reactstrap": "^9.2.2",
+    "sass": "^1.77.8"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

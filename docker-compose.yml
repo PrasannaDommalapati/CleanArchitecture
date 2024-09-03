@@ -33,6 +33,16 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     restart: unless-stopped
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+    volumes:
+      - C:\\GitHub\\CleanArchitecture\\src\\Web.API\\seq\\Logs:/data
 
 volumes:
   postgres-data:
