@@ -2,20 +2,21 @@ using Microsoft.AspNetCore.Mvc;
 using Web.API.Client;
 
 namespace Web.APP.Server.Controllers;
+
 [ApiController]
 [Route("api/[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private readonly IWeatherForecastClient _weatherForecastClient;
+    private readonly IApplicantsClient _applicantsClient;
 
-    public WeatherForecastController(IWeatherForecastClient weatherForecastClient)
+    public WeatherForecastController(IApplicantsClient applicantsClient)
     {
-        _weatherForecastClient = weatherForecastClient;
+        _applicantsClient = applicantsClient;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public async Task<IEnumerable<WeatherForecast>> GetAsync()
+    [HttpPost]
+    public async Task<ActionResult<Guid>> AddApplicant([FromBody] ApplicantDto applicantRequest, CancellationToken cancellationToken)
     {
-        return await _weatherForecastClient.GetAsync();
+        return await _applicantsClient.AddApplicantAsync(applicantRequest, cancellationToken);
     }
 }
