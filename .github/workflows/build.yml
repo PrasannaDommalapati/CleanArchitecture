@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore CleanArchitecture.sln -c Release
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build CleanArchitecture.sln -c Release --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test CleanArchitecture.sln -c Release --no-build --verbosity normal 
