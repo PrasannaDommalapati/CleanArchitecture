@@ -21,12 +21,18 @@ public class ApplicantsController : ControllerBase
 
     [HttpPost]
     [Description("Add an applicant")]
-    public async Task<ActionResult<Guid>> AddApplicantAsync([FromBody] ApplicantDto applicant, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApplicantResponseDto>> AddApplicantAsync([FromBody] ApplicantDto applicant, CancellationToken cancellationToken)
     {
         var request = new ApplicantAddRequest(applicant);
 
         var result = await _mediator.Send(request, cancellationToken);
+        if (result.IsSuccess)
+        {
+            var response = new ApplicantResponseDto(result.Value.Id, applicant);
 
-        return result.IsSuccess ? Ok() : BadRequest();
+            return Ok(new ApplicantResponseDto(result.Value.Id, applicant));
+        }
+
+        return BadRequest();
     }
 }

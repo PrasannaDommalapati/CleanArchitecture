@@ -1,6 +1,8 @@
-﻿namespace Interface;
+﻿using Domain.Dto.Applicant;
+
+namespace Interface;
 
 public interface IApplicantService
 {
-    Task ApplicantAddAsync(string? firstName, string? lastName, CancellationToken cancellationToken);
+    Task<ApplicantResponseDto> ApplicantAddAsync(ApplicantDto applicantDto, CancellationToken cancellationToken);
 }

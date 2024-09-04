@@ -1,4 +1,5 @@
-﻿using Infrastructure.Service;
+﻿using Domain;
+using Infrastructure.Service;
 using Interface;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,8 @@ public static class ConfigureServices
 {
     public static void AddInfrastructure(this IServiceCollection services)
     {
-        services.AddSingleton<IApplicantService, ApplicantService>();
+        services.AddScoped<ApplicationDbContext>();
         services.AddSingleton<IGetCurrentTimeService, GetCurrentTimeService>();
+        services.AddScoped<IApplicantService, ApplicantService>();
     }
 }
