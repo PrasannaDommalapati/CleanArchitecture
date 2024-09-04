@@ -22,7 +22,7 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore CleanArchitecture.sln
-    - name: Build
-      run: dotnet build /p:CI=true CleanArchitecture.sln -c Release --no-restore
-    - name: Test
+    - name: Build Solution
+      run: dotnet build /p:GenerateClient=false CleanArchitecture.sln -c Release --no-restore
+    - name: Unit Test
       run: dotnet test CleanArchitecture.sln -c Release --no-build --verbosity normal 
