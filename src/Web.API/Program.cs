@@ -2,7 +2,6 @@ using Application;
 using Domain;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NSwag;
 using NSwag.Generation.Processors.Security;

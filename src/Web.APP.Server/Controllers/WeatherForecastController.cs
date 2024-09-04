@@ -15,7 +15,7 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> AddApplicant([FromBody] ApplicantDto applicantRequest, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApplicantAddResponse>> AddApplicant([FromBody] ApplicantDto applicantRequest, CancellationToken cancellationToken)
     {
         return await _applicantsClient.AddApplicantAsync(applicantRequest, cancellationToken);
     }

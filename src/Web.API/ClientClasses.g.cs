@@ -29,14 +29,14 @@ namespace Web.API.Client
         /// Add an applicant
         /// </summary>
         /// <exception cref="APIException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> AddApplicantAsync(ApplicantDto applicant);
+        System.Threading.Tasks.Task<ApplicantAddResponse> AddApplicantAsync(ApplicantDto applicant);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Add an applicant
         /// </summary>
         /// <exception cref="APIException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Guid> AddApplicantAsync(ApplicantDto applicant, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ApplicantAddResponse> AddApplicantAsync(ApplicantDto applicant, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -76,7 +76,7 @@ namespace Web.API.Client
         /// Add an applicant
         /// </summary>
         /// <exception cref="APIException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Guid> AddApplicantAsync(ApplicantDto applicant)
+        public virtual System.Threading.Tasks.Task<ApplicantAddResponse> AddApplicantAsync(ApplicantDto applicant)
         {
             return AddApplicantAsync(applicant, System.Threading.CancellationToken.None);
         }
@@ -86,7 +86,7 @@ namespace Web.API.Client
         /// Add an applicant
         /// </summary>
         /// <exception cref="APIException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Guid> AddApplicantAsync(ApplicantDto applicant, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApplicantAddResponse> AddApplicantAsync(ApplicantDto applicant, System.Threading.CancellationToken cancellationToken)
         {
             if (applicant == null)
                 throw new System.ArgumentNullException("applicant");
@@ -134,7 +134,7 @@ namespace Web.API.Client
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Guid>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ApplicantAddResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new APIException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -274,12 +274,39 @@ namespace Web.API.Client
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApplicantDto
+    public partial class ApplicantAddResponse
     {
-        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("applicantId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid ApplicantId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FirstName { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string LastName { get; set; }
+
+        public string ToJson()
+        {
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+        public static ApplicantAddResponse FromJson(string data)
+        {
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicantAddResponse>(data, new Newtonsoft.Json.JsonSerializerSettings());
+
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ApplicantDto
+    {
+        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FirstName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string LastName { get; set; }
 
         public string ToJson()
