@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore CleanArchitecture.sln
     - name: Build
-      run: dotnet build CleanArchitecture.sln -c Release --no-restore
+      run: dotnet build /p:CI=true CleanArchitecture.sln -c Release --no-restore
     - name: Test
       run: dotnet test CleanArchitecture.sln -c Release --no-build --verbosity normal 
