@@ -31,6 +31,6 @@ public class ApplicantsController : ControllerBase
             return Ok(result.Value);
         }
 
-        return BadRequest();
+        return BadRequest(string.Join(",",result.Errors.Select(x => x.Message)));
     }
 }

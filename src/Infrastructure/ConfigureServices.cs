@@ -12,5 +12,7 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContext>();
         services.AddSingleton<IGetCurrentTimeService, GetCurrentTimeService>();
         services.AddScoped<IApplicantService, ApplicantService>();
+        services.AddScoped<IUserManagementService, UserManagementService>();
+        services.AddScoped<RoleSeedService>();
     }
 }

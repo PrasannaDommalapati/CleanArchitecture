@@ -4,7 +4,7 @@ using Domain.BaseEntities;
 
 namespace Domain.Entities;
 
-[Table("applicant", Schema ="skill")]
+[Table("applicant", Schema ="job")]
 public sealed class Applicant : BaseAuditableEntity
 {
     [MaxLength(100)]

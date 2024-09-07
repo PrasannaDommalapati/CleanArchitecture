@@ -1,7 +1,10 @@
 using Application;
 using Domain;
 using Infrastructure;
+using Infrastructure.Service;
+using Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -14,9 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
 // For IdentityUser
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>()
-//    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // For Autherntication
 builder.Services.AddAuthentication(options =>
@@ -61,6 +64,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
+
+    var roleSeeder = scope.ServiceProvider.GetRequiredService<RoleSeedService>();
+    await roleSeeder.SeedRolesAsync();
+
     await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var pendingTransactions = await dbContext.Database.GetPendingMigrationsAsync();
 
