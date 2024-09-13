@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.API.Client", "src\Web.A
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1C1AC5A7-67B5-4266-BA3C-95F82C374423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{C9B57A7A-A193-47D2-8906-2056E4E13F4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{C9B57A7A-A193-47D2-8906-2056E4E13F4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "src\Interface\Interface.csproj", "{0CCAFE38-E5A9-4158-8E06-C31417B41F54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interface", "src\Interface\Interface.csproj", "{0CCAFE38-E5A9-4158-8E06-C31417B41F54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

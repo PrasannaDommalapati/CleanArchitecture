@@ -35,7 +35,8 @@
         <PackageReference Include="AutoMapper" Version="13.0.1" />
     </ItemGroup>
 
-    <Target Name="NSwag" Inputs="$(OutDir)Web.API.dll" Outputs="swagger.json" AfterTargets="Build" Condition="'$(GenerateClient)' == 'True'">
+    <Target Name="NSwag" Inputs="$(OutDir)Web.API.dll" Outputs="swagger.json" AfterTargets="Build" >
+        <!--Condition="'$(GenerateClient)' == 'True'">-->
         <Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
         <Exec Command="$(NSwagExe_Net80) run config.nswag /variables:Assembly=$(OutDir)Web.API.dll" />
         <RemoveDir Directories="$(OutDir)References" />

@@ -1,5 +1,5 @@
 import CustomFooter from "./components/CustomFooter";
-import CustomNavbar from "./components/CustomNavbar";
+import CustomNavbar from "./components/Navbar";
 import PropTypes from "prop-types";
 
 const Layout = ({ children }) => {

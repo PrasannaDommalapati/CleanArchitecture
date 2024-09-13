@@ -1,0 +1,21 @@
+/* General form styles */
+.form__login {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #fff;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+    .form__login {
+        padding: 15px;
+    }
+}
+
+/* For extra small screens */
+@media (max-width: 576px) {
+    .form__login {
+        width: 90%;
+    }
+}

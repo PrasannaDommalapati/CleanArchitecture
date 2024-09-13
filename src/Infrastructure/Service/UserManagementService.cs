@@ -10,7 +10,9 @@ public class UserManagementService : IUserManagementService
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public UserManagementService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
+    public UserManagementService(UserManager<IdentityUser> userManager,
+                                 SignInManager<IdentityUser> signInManager,
+                                 RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -89,6 +91,7 @@ public class UserManagementService : IUserManagementService
 
                 return (response, $"User failed to create '{roleResult.Errors.First().Description}'");
             }
+
             return (new SignupResponseDto(email, userName, role), string.Empty);
         }
 

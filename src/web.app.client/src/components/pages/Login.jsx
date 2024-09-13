@@ -1,118 +1,78 @@
 import { useState } from "react";
-// import { useHistory } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import logo from "../../assets/logo.svg";
-
+import {PostLogin} from "../../api/index";
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  // const history = useHistory();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Handle login logic here (e.g., API call)
-    console.log("Username:", username);
-    console.log("Password:", password);
-    // After successful login, redirect or take further action
-  };
+    const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
+    const onHandleChange = (event) => {
+        setFormData((prev) => ({
+            ...prev,
+            [event.target.id]: event.target.value,
+        }));
+    };
 
-  // const handleCancel = () => {
-  //   history.push('/'); // Redirect to home page
-  // };
+    const onHandleSubmit = async (event) => {
+        event.preventDefault();
+        setIsLoading(true);
 
-  return (
-    <div className="d-flex">
-      <img
-        alt="logo"
-        src={logo}
-        style={{
-          height: "20vw",
-          width: "60vw",
-        }}
-      />
-      <div
-        style={{
-          maxWidth: "400px",
-          margin: "0 auto",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-        }}
-      >
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: "15px" }}>
-            <label
-              htmlFor="username"
-              style={{ display: "block", marginBottom: "5px" }}
-            >
-              Username:
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-              }}
-            />
-          </div>
-          <div style={{ position: "relative" }}>
-            <label>Password:</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ paddingRight: "30px" }}
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: "absolute",
-                right: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
-            >
-              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </span>
-          </div>
-          <div>
-            <button
-              type="submit"
-              style={{
-                padding: "10px 20px",
-                marginRight: "10px",
-                borderRadius: "5px",
-                border: "none",
-                backgroundColor: "#28a745",
-                color: "white",
-              }}
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              style={{
-                padding: "10px 20px",
-                borderRadius: "5px",
-                border: "none",
-                backgroundColor: "#dc3545",
-                color: "white",
-              }}
-            >
-              Cancel
-            </button>
-          </div>
+        var response = await PostLogin(formData);
+        console.log(response);
+    };
+
+    return (<div className="login__container">
+        <form onSubmit={onHandleSubmit} className="form__login">
+            {isError && <div className="errorMessage text-danger">Failed to register the user</div>}
+            <div className="form-group row">
+                <label htmlFor="email" className="col-sm-2 col-form-label">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    placeholder="Enter email"
+                    onChange={onHandleChange}
+                />
+            </div>
+          
+            <div className="form-group row">
+                <label htmlFor="password">Password</label>
+                <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    placeholder="Password"
+                    onChange={onHandleChange}
+                />
+            </div>
+            <div className="form-check">
+                <span>
+                    <input type="checkbox" className="form-check-input" id="remember" />
+                    <label className="form-check-label" htmlFor="remember">
+                        Remember password
+                    </label>
+                </span>
+                <span>
+                    Not Registered?
+                    <a className="has-account" href="/signup">
+                        Signup
+                    </a>
+                </span>
+            </div>
+
+            <div className="form__buttons">
+                <button type="button" className="btn btn-secondary">
+                    Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                    Login
+                </button>
+            </div>
         </form>
-      </div>
     </div>
   );
 };

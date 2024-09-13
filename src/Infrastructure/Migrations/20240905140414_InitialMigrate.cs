@@ -33,7 +33,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
         name: "AspNetRoles",
-        schema: "job",
         columns: table => new
         {
             Id = table.Column<string>(type: "text", nullable: false),
@@ -48,7 +47,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
             name: "AspNetUsers",
-            schema: "job",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -74,7 +72,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
             name: "AspNetRoleClaims",
-            schema: "job",
             columns: table => new
             {
                 Id = table.Column<int>(type: "integer", nullable: false)
@@ -96,7 +93,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
             name: "AspNetUserClaims",
-            schema: "job",
             columns: table => new
             {
                 Id = table.Column<int>(type: "integer", nullable: false)
@@ -118,7 +114,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
             name: "AspNetUserLogins",
-            schema: "job",
             columns: table => new
             {
                 LoginProvider = table.Column<string>(type: "text", nullable: false),
@@ -139,7 +134,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
             name: "AspNetUserRoles",
-            schema: "job",
             columns: table => new
             {
                 UserId = table.Column<string>(type: "text", nullable: false),
@@ -164,7 +158,6 @@ public partial class InitialMigrate : Migration
 
         migrationBuilder.CreateTable(
             name: "AspNetUserTokens",
-            schema: "job",
             columns: table => new
             {
                 UserId = table.Column<string>(type: "text", nullable: false),
@@ -186,45 +179,38 @@ public partial class InitialMigrate : Migration
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",
             table: "AspNetRoleClaims",
-            column: "RoleId",
-            schema: "job");
+            column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "RoleNameIndex",
             table: "AspNetRoles",
             column: "NormalizedName",
-            schema: "job",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserClaims_UserId",
             table: "AspNetUserClaims",
-            column: "UserId",
-            schema: "job");
+            column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserLogins_UserId",
             table: "AspNetUserLogins",
-            column: "UserId",
-            schema: "job");
+            column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserRoles_RoleId",
             table: "AspNetUserRoles",
-            column: "RoleId",
-            schema: "job");
+            column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "EmailIndex",
             table: "AspNetUsers",
-            column: "NormalizedEmail",
-            schema: "job");
+            column: "NormalizedEmail");
 
         migrationBuilder.CreateIndex(
             name: "UserNameIndex",
             table: "AspNetUsers",
             column: "NormalizedUserName",
-            schema: "job",
             unique: true);
     }
 
@@ -236,31 +222,25 @@ public partial class InitialMigrate : Migration
             schema: "job");
 
         migrationBuilder.DropTable(
-            name: "AspNetRoleClaims",
-            schema: "job");
+            name: "AspNetRoleClaims");
 
         migrationBuilder.DropTable(
-            name: "AspNetUserClaims",
-            schema: "job");
+            name: "AspNetUserClaims");
 
         migrationBuilder.DropTable(
-            name: "AspNetUserLogins",
-            schema: "job");
+            name: "AspNetUserLogins");
 
         migrationBuilder.DropTable(
             name: "AspNetUserRoles",
             schema: "job");
 
         migrationBuilder.DropTable(
-            name: "AspNetUserTokens",
-            schema: "job");
+            name: "AspNetUserTokens");
 
         migrationBuilder.DropTable(
-            name: "AspNetRoles",
-            schema: "job");
+            name: "AspNetRoles");
 
         migrationBuilder.DropTable(
-            name: "AspNetUsers",
-            schema: "job");
+            name: "AspNetUsers");
     }
 }

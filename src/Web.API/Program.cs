@@ -1,11 +1,14 @@
+using System.Net;
+using System.Net.Mail;
 using Application;
 using Domain;
+using Domain.Dto;
 using Infrastructure;
 using Infrastructure.Service;
-using Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
@@ -16,10 +19,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
+builder.Services.AddAuthorization();
+
 // For IdentityUser
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = true;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // For Autherntication
 builder.Services.AddAuthentication(options =>
@@ -30,15 +41,25 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Add services to the container.
+builder.Services.AddTransient<SmtpClient>(provider =>
+{
+    return new SmtpClient("smtp.example.com")
+    {
+        Port = 587,
+        Credentials = new NetworkCredential("your-username", "your-password"),
+        EnableSsl = true
+    };
+});
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 // For EF
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Infrastructure"));
-});
+builder.Services.Configure<IdentityConfiguration>(builder.Configuration.GetSection("IdentityConfiguration"));
+builder.Services
+    .AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Infrastructure")));
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument(configure =>
@@ -90,7 +111,48 @@ app.UseMiddleware<RequestContextLoggingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.MapIdentityApi<IdentityUser>();
 
 app.MapControllers();
 
+await SeedRolesAndAdminUsersAsync(app.Services);
+
 app.Run();
+
+static async Task SeedRolesAndAdminUsersAsync(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    var roles = new[] { "Admin", "Manager", "Member" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    var identityConfig = scope.ServiceProvider.GetRequiredService<IOptions<IdentityConfiguration>>().Value;
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    foreach (var user in identityConfig.UserAccounts)
+    {
+        var email = user.Email;
+        if (await userManager.FindByEmailAsync(email) is null)
+        {
+            var identityUser = new IdentityUser
+            {
+                Email = email,
+                UserName = email,
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(identityUser, user.Password);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(identityUser, "Admin");
+            }
+        }
+    }
+}
