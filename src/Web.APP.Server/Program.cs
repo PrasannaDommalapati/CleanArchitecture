@@ -1,13 +1,7 @@
-using NLog;
-using NLog.Web;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Web.API.Client;
 
-// Early init of NLog to allow startup and exception logging, before host is built
-//var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-//logger.Debug("init main");
-//try
-//{
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
@@ -20,11 +14,17 @@ AddHttpClients(builder.Services, apiSectionConfig);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
  {
+     options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+     {
+         Name = "Authorization",
+         Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+         In = ParameterLocation.Header,
+         Type = SecuritySchemeType.ApiKey,
+         Scheme = "Bearer"
+     });
      options.CustomSchemaIds(type => type.ToString());
  });
 
-builder.Logging.ClearProviders().AddConsole();
-builder.Host.UseNLog();
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -63,14 +63,3 @@ void AddHttpClients(IServiceCollection services, IConfigurationSection configura
 
     void ConfigureHttpClient(IServiceProvider serviceProvider, HttpClient httpClient) => httpClient.BaseAddress = apiBaseUrl;
 }
-//}
-//catch (Exception exception)
-//{
-//    logger.Error(exception, "Stopped program because of exception");
-//    throw;
-//}
-//finally
-//{
-//     // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
-//    LogManager.Shutdown();
-//}

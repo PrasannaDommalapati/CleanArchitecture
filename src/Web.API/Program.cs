@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Serilog;
 using Web.API.Middlewares;
+using OpenApiSecurityScheme = Microsoft.OpenApi.Models.OpenApiSecurityScheme;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,22 +64,19 @@ builder.Services
     options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Infrastructure")));
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApiDocument(configure =>
-{
-    configure.Title = "Your API";
-    configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
-    {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Type into the textbox: 'Bearer {your JWT token}'."
-    });
-
-    configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+     {
+         Name = "Authorization",
+         Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+         In = ParameterLocation.Header,
+         Type = SecuritySchemeType.ApiKey,
+         Scheme = "Bearer"
+     });
+});
 
 var app = builder.Build();
 
