@@ -9,8 +9,8 @@ public sealed class Applicant : BaseAuditableEntity
 {
     [MaxLength(100)]
     [Column("first_name")]
-    public string FirstName { get; set; }
+    public required string FirstName { get; set; }
     [MaxLength(100)]
     [Column("last_name")]
-    public string LastName { get; set; }
+    public required string LastName { get; set; }
 }

@@ -2,5 +2,5 @@
 
 public class IdentityConfiguration
 {
-    public List<UserAccounts> UserAccounts { get; set; }
+    public List<UserAccounts> UserAccounts { get; set; } = [];
 }
