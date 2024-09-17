@@ -3,17 +3,23 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 7118
+EXPOSE 7119
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Web.API/Web.API.csproj", "Web.API/"]
+
+COPY ../../src/Web.API/ ./Web.API
+COPY ../../src/Application/ ./Application
+COPY ../../src/Domain/ ./Domain
+COPY ../../src/Infrastructure/ ./Infrastructure
+COPY ../../src/Interface/ ./Interface
+
 RUN dotnet restore "./Web.API/Web.API.csproj"
 COPY . .
 WORKDIR "/src/Web.API"
-RUN dotnet build "./Web.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./Web.API.csproj" /p:GenerateClient=true -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release

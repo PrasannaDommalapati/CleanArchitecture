@@ -5,23 +5,17 @@ using Domain;
 using Domain.Dto;
 using Infrastructure;
 using Infrastructure.Service;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using NSwag;
-using NSwag.Generation.Processors.Security;
 using Serilog;
-using Web.API.Middlewares;
-using OpenApiSecurityScheme = Microsoft.OpenApi.Models.OpenApiSecurityScheme;
-
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
-
-builder.Services.AddAuthorization();
 
 // For IdentityUser
 builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
@@ -32,15 +26,10 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
     options.SignIn.RequireConfirmedEmail = true;
 })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
-// For Autherntication
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-});
+builder.Services.AddAuthorization();
 
 // Add services to the container.
 builder.Services.AddTransient<SmtpClient>(provider =>
@@ -53,12 +42,21 @@ builder.Services.AddTransient<SmtpClient>(provider =>
     };
 });
 
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
-
 // For EF
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.Configure<IdentityConfiguration>(builder.Configuration.GetSection("IdentityConfiguration"));
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("The 'DefaultConnection' is missing from the configuration.");
+}
+var identityConfigSection = builder.Configuration.GetSection(nameof(IdentityConfiguration));
+
+if (!identityConfigSection.Exists())
+{
+    throw new InvalidOperationException($"The '{nameof(IdentityConfiguration)}' is missing from the configuration.");
+}
+
+builder.Services.Configure<IdentityConfiguration>(identityConfigSection);
 builder.Services
     .AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Infrastructure")));
@@ -66,17 +64,21 @@ builder.Services
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApiDocument();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
      {
          Name = "Authorization",
-         Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+         Description = "Enter the Bearer Authorization string as following: `Bearer generated AccessToken`",
          In = ParameterLocation.Header,
          Type = SecuritySchemeType.ApiKey,
          Scheme = "Bearer"
      });
 });
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
@@ -105,7 +107,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
-app.UseMiddleware<RequestContextLoggingMiddleware>();
+//app.UseMiddleware<RequestContextLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 

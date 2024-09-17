@@ -2,6 +2,7 @@
 using Application.Commands.Applicant;
 using Domain.Dto.Applicant;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.API.Controllers;
@@ -32,5 +33,12 @@ public class ApplicantsController : ControllerBase
         }
 
         return BadRequest(string.Join(",",result.Errors.Select(x => x.Message)));
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public IActionResult GetResponse()
+    {
+        return Ok(new List<string> { "Apple", "Banana" });
     }
 }
