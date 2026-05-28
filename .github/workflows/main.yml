@@ -13,7 +13,7 @@ jobs:
       with:
         node-version: 24.x
     - name: Setup Dotnet 8.0
-      uses: actions/setup-dotnet@4
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     
