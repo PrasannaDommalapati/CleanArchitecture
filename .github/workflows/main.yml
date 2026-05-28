@@ -1,0 +1,10 @@
+name: Build dotNet Apps
+
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6.0.2
